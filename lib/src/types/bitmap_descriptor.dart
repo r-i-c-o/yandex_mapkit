@@ -17,10 +17,11 @@ class BitmapDescriptor extends Equatable {
   }
 
   /// Creates a [BitmapDescriptor] using an array of bytes that must be encoded as PNG.
-  factory BitmapDescriptor.fromBytes(Uint8List byteData) {
+  factory BitmapDescriptor.fromBytes(Uint8List byteData, {String? id}) {
     return BitmapDescriptor._({
       'type': 'fromBytes',
-      'rawImageData': byteData
+      'rawImageData': byteData,
+      'id': id,
     });
   }
 

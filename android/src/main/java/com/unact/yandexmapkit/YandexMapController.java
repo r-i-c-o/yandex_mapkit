@@ -39,6 +39,7 @@ import com.yandex.mapkit.traffic.TrafficListener;
 import com.yandex.mapkit.user_location.UserLocationLayer;
 import com.yandex.mapkit.user_location.UserLocationObjectListener;
 import com.yandex.mapkit.user_location.UserLocationView;
+import com.yandex.runtime.image.ImageProvider;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ public class YandexMapController implements
   @SuppressWarnings({"UnusedDeclaration", "FieldCanBeLocal"})
   private CircleMapObjectController userAccuracyCircleController;
   private final MapObjectCollectionController rootController;
+  private final Map<String, ImageProvider> placemarkImageProviders = new HashMap<>();
   private boolean disposed = false;
   private MethodChannel.Result initResult;
 
@@ -782,6 +784,15 @@ public class YandexMapController implements
     arguments.put("point", Utils.pointToJson(point));
 
     methodChannel.invokeMethod("onMapObjectTap", arguments);
+  }
+
+  @Nullable
+  public ImageProvider getImageProviderForId(@NonNull String id) {
+      return placemarkImageProviders.get(id);
+  }
+
+  public void addImageProviderForId(@NonNull String id, @NonNull ImageProvider imageProvider) {
+      placemarkImageProviders.put(id, imageProvider);
   }
 
   @Override

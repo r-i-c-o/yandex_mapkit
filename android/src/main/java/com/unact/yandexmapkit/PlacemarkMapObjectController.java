@@ -135,6 +135,7 @@ public class PlacemarkMapObjectController
   @SuppressWarnings({"ConstantConditions"})
   private ImageProvider getIconImage(Map<String, Object> image) {
     String type = (String) image.get("type");
+    String id = (String) image.get("id");
     ImageProvider defaultImage = ImageProvider.fromBitmap(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888));
 
     if (type.equals("fromAssetImage")) {
@@ -154,7 +155,14 @@ public class PlacemarkMapObjectController
       Bitmap bitmap = BitmapFactory.decodeByteArray(rawImageData, 0, rawImageData.length);
 
       if (bitmap != null) {
-        return ImageProvider.fromBitmap(bitmap);
+          if (id != null && !id.isEmpty()) {
+              ImageProvider cachedProvider = controller.get().getImageProviderForId(id);
+              if (cachedProvider != null) return cachedProvider;
+              ImageProvider provider = ImageProvider.fromBitmap(bitmap, true, id);
+              controller.get().addImageProviderForId(id, provider);
+              return provider;
+          }
+          return ImageProvider.fromBitmap(bitmap);
       }
 
       return defaultImage;
